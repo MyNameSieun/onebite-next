@@ -1,5 +1,5 @@
+import { BookData } from "@/types";
 import Link from "next/link";
-import { BookData } from "../.next/types";
 
 const BookItem = ({
   id,
