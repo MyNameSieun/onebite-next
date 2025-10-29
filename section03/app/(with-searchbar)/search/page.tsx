@@ -10,7 +10,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const SearchResult = async ({ q }: { q: string }) => {
   const res = await fetch(`${apiUrl}/book/search?q=${q}`, {
-    cache: "force-cache",
+    cache: "no-cache",
   });
 
   if (!res.ok) {

@@ -1,5 +1,7 @@
-import { BookData } from "@/types";
+import { BookData, ReviewData } from "@/types";
 import { notFound } from "next/navigation";
+import ReviewItem from "@/components/review-item";
+import { ReviewEditor } from "@/components/review-editor";
 
 export const dynamicParams = false;
 export const dynamic = "error";
@@ -8,14 +10,8 @@ export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 }
 
-const BookDetailPage = async ({
-  params,
-}: {
-  params: Promise<{ id: string | string[] }>;
-}) => {
-  const { id } = await params;
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${id}`);
+const BookDetail = async ({ bookId }: { bookId: string }) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${bookId}`);
   if (!res.ok) {
     if (res.status === 404) {
       notFound();
@@ -28,7 +24,7 @@ const BookDetailPage = async ({
   const { title, subTitle, description, author, publisher, coverImgUrl } = book;
 
   return (
-    <div className="flex flex-col gap-3">
+    <section className="flex flex-col gap-3">
       {/*  커버 이미지 영역 */}
       <div
         className="relative flex justify-center bg-cover bg-center bg-no-repeat p-5"
@@ -43,7 +39,7 @@ const BookDetailPage = async ({
       </div>
 
       {/* 책 정보 */}
-      <div className="flex flex-col gap-1 px-5">
+      <div className="flex flex-col gap-1">
         <div className="text-lg font-bold">{title}</div>
         <div className="text-gray-500">{subTitle}</div>
         <div className="text-sm text-gray-500">
@@ -55,6 +51,40 @@ const BookDetailPage = async ({
       <div className="rounded-md bg-gray-100 p-4 text-sm leading-relaxed whitespace-pre-line">
         {description}
       </div>
+    </section>
+  );
+};
+
+const ReviewList = async ({ bookId }: { bookId: string }) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/review/book/${bookId}`,
+    { next: { tags: [`review-${bookId}`] } },
+  );
+
+  if (!res.ok) throw new Error(`Review fetch failed : ${res.statusText}`);
+
+  const reviews: ReviewData[] = await res.json();
+
+  return (
+    <section>
+      {reviews.map((review) => (
+        <ReviewItem key={`review-item-${review.id}`} {...review} />
+      ))}
+    </section>
+  );
+};
+
+const BookDetailPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
+  return (
+    <div className="flex flex-col gap-y-32">
+      <BookDetail bookId={id} />
+      <ReviewEditor bookId={id} />
+      <ReviewList bookId={id} />
     </div>
   );
 };

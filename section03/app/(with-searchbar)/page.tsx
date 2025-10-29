@@ -1,6 +1,5 @@
 // app/(with-searchbar)/page.tsx
 import BookItem from "@/components/book-item";
-import BookItemSkeleton from "@/components/skeleton/book-item-skeleton";
 import BookListSkeletion from "@/components/skeleton/book-list-skeletion";
 import { BookData } from "@/types";
 import delay from "@/util/delay";
@@ -9,7 +8,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // 컴포넌트 분리
 async function AllBooks() {
   await delay(1500);
-  const res = await fetch(`${apiUrl}/book`, { cache: "force-cache" });
+  const res = await fetch(`${apiUrl}/book`, { cache: "no-cache" });
   if (!res.ok) {
     <div>오류가 발생했습니다</div>;
   }
