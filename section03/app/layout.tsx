@@ -20,6 +20,7 @@ export default function RootLayout({
 
           <footer className="pt-30 text-gray-500">제작 @미야옹</footer>
         </div>
+        <div id="modal-root"></div> {/* 추가 */}
       </body>
     </html>
   );
