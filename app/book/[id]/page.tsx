@@ -8,9 +8,24 @@ import { Metadata } from "next";
 export const dynamicParams = false;
 export const dynamic = "error";
 
-export function generateStaticParams() {
+/* 변경 전 
+  export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
+} */
+
+// 변경 후
+export async function generateStaticParams() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`);
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  const books: BookData[] = await res.json();
+  return books.map((book) => ({
+    id: book.id.toString(),
+  }));
 }
+
 export async function generateMetadata({
   params,
 }: {

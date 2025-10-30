@@ -1,7 +1,7 @@
 // actions/create-review.action.ts
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 type TReviewActionState = {
   status: boolean;
   error: string;

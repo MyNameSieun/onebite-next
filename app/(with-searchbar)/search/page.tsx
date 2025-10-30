@@ -1,8 +1,6 @@
 // app/(with-searchbar)/search/page.tsx
 import BookItem from "@/components/book-item";
-import BookListSkeletion from "@/components/skeleton/book-list-skeletion";
 import { BookData } from "@/types";
-import delay from "@/util/delay";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
