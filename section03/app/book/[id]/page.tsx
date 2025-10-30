@@ -2,6 +2,8 @@ import { BookData, ReviewData } from "@/types";
 import { notFound } from "next/navigation";
 import ReviewItem from "@/components/review-item";
 import { ReviewEditor } from "@/components/review-editor";
+import Image from "next/image";
+import { Metadata } from "next";
 
 export const dynamicParams = false;
 export const dynamic = "error";
@@ -9,9 +11,34 @@ export const dynamic = "error";
 export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 }
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${id}`, {
+    cache: "force-cache",
+  });
+
+  if (!res.ok) throw new Error(res.statusText);
+
+  const book: BookData = await res.json();
+  return {
+    title: `${book.title} : - 한입 북스`,
+    description: `${book.description}`,
+    openGraph: {
+      title: `${book.title} : - 한입 북스`,
+      description: `${book.description}`,
+      images: [book.coverImgUrl],
+    },
+  };
+}
 
 const BookDetail = async ({ bookId }: { bookId: string }) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${bookId}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${bookId}`, {
+    cache: "force-cache",
+  });
   if (!res.ok) {
     if (res.status === 404) {
       notFound();
@@ -31,9 +58,11 @@ const BookDetail = async ({ bookId }: { bookId: string }) => {
         style={{ backgroundImage: `url('${coverImgUrl}')` }}
       >
         <div className="absolute inset-0 bg-black/70" /> {/* 어두운 오버레이 */}
-        <img
+        <Image
+          width={240}
+          height={300}
           src={coverImgUrl}
-          alt={title}
+          alt={`도서 ${title}의 이미지`}
           className="relative z-10 max-h-[350px] object-contain"
         />
       </div>

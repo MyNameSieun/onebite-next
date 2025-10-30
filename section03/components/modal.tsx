@@ -28,7 +28,7 @@ const Modal = ({ children }: { children: ReactNode }) => {
         }
       }}
       ref={dialogRef}
-      className="l mx-auto my-auto w-9/12 p-6 backdrop:bg-black/50"
+      className="l mx-auto my-auto h-3/4 w-7/12 p-6 backdrop:bg-black/50"
     >
       {children}
     </dialog>,

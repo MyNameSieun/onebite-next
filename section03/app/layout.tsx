@@ -3,8 +3,10 @@ import Link from "next/link";
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -15,12 +17,12 @@ export default function RootLayout({
               📚 ONEBITE BOOKS
             </Link>
           </header>
-
-          {children}
+          <main>{children}</main>
 
           <footer className="pt-30 text-gray-500">제작 @미야옹</footer>
         </div>
-        <div id="modal-root"></div> {/* 추가 */}
+        {modal}
+        <div id="modal-root"></div>
       </body>
     </html>
   );

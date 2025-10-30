@@ -1,4 +1,5 @@
 import { BookData } from "@/types";
+import Image from "next/image";
 import Link from "next/link";
 
 const BookItem = ({
@@ -15,7 +16,13 @@ const BookItem = ({
       href={`book/${id}`}
       className="flex gap-3 border-b border-gray-200 py-5"
     >
-      <img src={coverImgUrl} alt={title} className="w-20" />
+      <Image
+        src={coverImgUrl}
+        width={80}
+        height={105}
+        alt={`도서 ${title}의 표지 이미지`}
+        className="w-20"
+      />
       <div className="flex flex-col">
         <div className="flex flex-1 flex-col">
           <div className="font-bold">{title}</div>
